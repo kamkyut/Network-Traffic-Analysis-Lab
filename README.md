@@ -13,11 +13,6 @@ The goal of this project is to observe how a port scan (Nmap) appears to a defen
 - **Victim:** Ubuntu Desktop (IP: `10.0.2.15`)
 - **Network Mode:** NAT Network
 
-## Lab Setup
-* **Hypervisor:** VirtualBox
-* **Attacker:** Kali Linux
-* **Victim:** Ubuntu Desktop
-
 ### Challenges Overcome: Network Configuration
 During the initial setup, the VMs were unable to communicate despite being on the default NAT setting. 
 - **Issue:** Kali was only assigned an IPv6 address, and Ubuntu was on a different subnet, preventing a "Ping" connection.
