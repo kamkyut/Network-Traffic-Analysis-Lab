@@ -34,17 +34,16 @@ I simulated a reconnaissance attack using Kali Linux to identify open ports on t
 3. Analyzed the resulting packet flow.
 
 ### Captured Evidence:
-![Wireshark Nmap Capture](<img width="1271" height="805" alt="nmap_wireshark_capture" src="https://github.com/user-attachments/assets/98dd19f5-2cec-43df-b584-08a8b168ddd8" />
-)
+![Wireshark Nmap Capture](https://github.com/user-attachments/assets/98dd19f5-2cec-43df-b584-08a8b168ddd8)
 
 ### Analysis:
 The capture shows a "Half-Open" connection attempt. Kali sends a `SYN` packet, Ubuntu responds with `SYN, ACK` (for open ports), and Kali immediately sends `RST` to close the connection before it's fully established. This avoids traditional logging on the victim machine.
 
 ## 🛡️ Phase 2: Hardening & Defense Implementation
 After analyzing the attack, I implemented defensive measures to secure the Ubuntu target.
+
 ### Evidence:
-![Hardened Scan Results](<img width="1274" height="815" alt="nmap_hardened_capture" src="https://github.com/user-attachments/assets/05388e30-07b5-4ae6-9ccf-3ebc6049ab20" />
-)
+![Hardened Scan Results](https://github.com/user-attachments/assets/05388e30-07b5-4ae6-9ccf-3ebc6049ab20)
 
 ### Defensive Actions Taken:
 1. **Firewall Activation (UFW):**
