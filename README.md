@@ -39,7 +39,7 @@ I simulated a reconnaissance attack using Kali Linux to identify open ports on t
 ### Analysis:
 The capture shows a "Half-Open" connection attempt. Kali sends a `SYN` packet, Ubuntu responds with `SYN, ACK` (for open ports), and Kali immediately sends `RST` to close the connection before it's fully established. This avoids traditional logging on the victim machine.
 
-## 🛡️ Phase 2: Hardening & Defense Implementation
+## Phase 2: Hardening & Defense Implementation
 After analyzing the attack, I implemented defensive measures to secure the Ubuntu target.
 
 ### Evidence:
@@ -58,7 +58,7 @@ Command:
 sudo iptables -I INPUT -p tcp --syn -m limit --limit 1/s --limit-burst 3 -j RETURN
 sudo iptables -I INPUT -p tcp --syn -j DROP
 
-## 🎓 Conclusion & Key Learnings
+## Conclusion & Key Learnings
 This lab demonstrated the critical difference between **passive monitoring** and **active defense**. 
 
 - **Visibility is Key:** Without Wireshark, the stealth SYN scan would have gone completely unnoticed by the standard OS logs.
