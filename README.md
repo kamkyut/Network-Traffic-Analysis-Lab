@@ -24,14 +24,19 @@ During the initial setup, the VMs were unable to communicate despite being on th
 I simulated a reconnaissance attack using Kali Linux to identify open ports on the Ubuntu target.
 
 ### Steps Taken:
-1. Started a live capture in Wireshark on the Ubuntu machine.
-2. Executed a TCP SYN Stealth Scan from Kali: `sudo nmap -sS -T4 10.0.2.15`.
-3. Analyzed the resulting packet flow.
 
-### Captured Evidence:
+### 1. Attacker View:
+The Nmap scan successfully identified open ports and services on the target machine.
+![Nmap Scan Results](https://github.com/user-attachments/assets/7a3226a1-2572-4666-8d09-cfed047117d9)
+
+Command:
+sudo nmap -sS -T4 10.0.2.15
+
+### 2. Captured Evidence:
+The capture shows the "Half-Open" SYN packets being sent to the target.
 ![Wireshark Nmap Capture](https://github.com/user-attachments/assets/98dd19f5-2cec-43df-b584-08a8b168ddd8)
 
-### Analysis:
+### 3. Analysis:
 The capture shows a "Half-Open" connection attempt. Kali sends a `SYN` packet, Ubuntu responds with `SYN, ACK` (for open ports), and Kali immediately sends `RST` to close the connection before it's fully established. This avoids traditional logging on the victim machine.
 
 ## Phase 2: Hardening & Defense Implementation
@@ -44,12 +49,12 @@ After analyzing the attack, I implemented defensive measures to secure the Ubunt
 1. **Firewall Activation (UFW):**
    I enabled the Uncomplicated Firewall to set a "Deny by Default" policy.
 Command:
-  sudo ufw enable
-  sudo ufw default deny incoming
+sudo ufw enable
+sudo ufw default deny incoming
 
-3. Rate Limiting (iptables):
+2. **Rate Limiting (iptables):**
 To mitigate automated scanning, I implemented a rule to limit new TCP SYN packets to 1 per second.
-Command: 
+Command:
 sudo iptables -I INPUT -p tcp --syn -m limit --limit 1/s --limit-burst 3 -j RETURN
 sudo iptables -I INPUT -p tcp --syn -j DROP
 
