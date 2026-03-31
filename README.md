@@ -3,25 +3,27 @@
 A hands-on lab environment designed to simulate, capture, and defend against network reconnaissance attacks.
 
 ## Objective
-The goal of this project is to observe how a port scan (Nmap) appears to a defender using **Wireshark** and to implement active defense mechanisms using **UFW** and **iptables**.
+The goal of this project evolved from observing basic port scans (Nmap) in Wireshark to implementing active defense mechanisms (UFW/iptables) and finally deploying a full-stack SIEM (Security Information and Event Management) for automated threat detection.
 
 ---
 
 ## Lab Setup
-- **Hypervisor:** VirtualBox 7.x
+- **Hypervisor:** VirtualBox 7.1.4
 - **Attacker:** Kali Linux (IP: `10.0.2.4`)
-- **Victim:** Ubuntu Desktop (IP: `10.0.2.15`)
+- **Victim/Security Server:** Ubuntu Desktop (IP: `10.0.2.15`)
+- **Security Stack:** Wazuh Manager and Agent, Wireshare, UFW, iptables
 - **Network Mode:** NAT Network
 
 ### Challenges Overcome: Network Configuration
-During the initial setup, the VMs were unable to communicate despite being on the default NAT setting. 
-- **Issue:** Kali was only assigned an IPv6 address, and Ubuntu was on a different subnet, preventing a "Ping" connection.
+1. **Issue:** During the initial setup, the VMs were unable to communicate despite being on the default NAT setting. 
 - **Solution:** I created a dedicated **NAT Network** in VirtualBox and enabled **Promiscuous Mode**. This ensured both VMs were on the same `10.0.2.x` subnet and allowed Wireshark to "sniff" the traffic between them.
 
+2. **Issue:** During the Wazuh installation, the Ubuntu VM ran out of storage due to the Indexer's requirements.
+- **Solution:** Performed a manual disk expansion in VirtualBox and utilized GParted to resize the Linux partition and claim unallocated space, ensuring a stable environment for the SIEM database. Used several commands to restart the process and reinstall the Wazuh manager.
 ---
 
 ## Phase 1: Attack & Capture
-I simulated a reconnaissance attack using Kali Linux to identify open ports on the Ubuntu target.
+I simulated a Stealth attack using Kali Linux to identify open ports on the Ubuntu target.
 
 ### Steps Taken:
 
@@ -57,6 +59,14 @@ To mitigate automated scanning, I implemented a rule to limit new TCP SYN packet
 Command:
 sudo iptables -I INPUT -p tcp --syn -m limit --limit 1/s --limit-burst 3 -j RETURN
 sudo iptables -I INPUT -p tcp --syn -j DROP
+
+
+## Phase 3: SIEM Implementation (Wazuh)
+To upgrade the lab to industry standards, I deployed Wazuh, an open-source security monitoring platform, to automate threat identification.
+
+- **Manager and Agent:** Installed the Wazuh Manager as the central "Brain" and configured a local Agent on the Ubuntu endpoint to monitor system integrity and network events.
+- **Real-Time Alerting:** Re-running the Nmap scan now triggers high-severity alerts on the Wazuh Dashboard, providing instant visibility without manual packet sniffing.
+
 
 ## Conclusion & Key Learnings
 This lab demonstrated the critical difference between **passive monitoring** and **active defense**. 
